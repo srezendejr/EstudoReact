@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tuURCirvgZU=",
+  "dgSpecHash": "FNc+s0IBXJY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
+  "projectFilePath": "C:\\git\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -84,5 +84,24 @@
     "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://tfs.jbs.com.br/tfs/JBS%201.0/_packaging/Corporate.ClassLibrary/nuget/v3/index.json.",
+      "projectPath": "C:\\git\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\git\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://tfs.jbs.com.br/tfs/NT/_packaging/JBS.BackgroundService/nuget/v3/index.json.",
+      "projectPath": "C:\\git\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\git\\EstudoReact\\EstudoReact.Data\\EstudoReact.Data.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

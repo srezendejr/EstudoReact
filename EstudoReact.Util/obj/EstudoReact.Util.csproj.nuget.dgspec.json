@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj": {}
+    "C:\\git\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj": {
+    "C:\\git\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj",
+        "projectUniqueName": "C:\\git\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj",
         "projectName": "EstudoReact.Util",
-        "projectPath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj",
+        "projectPath": "C:\\git\\EstudoReact\\EstudoReact.Util\\EstudoReact.Util.csproj",
         "packagesPath": "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Util\\obj\\",
+        "outputPath": "C:\\git\\EstudoReact\\EstudoReact.Util\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

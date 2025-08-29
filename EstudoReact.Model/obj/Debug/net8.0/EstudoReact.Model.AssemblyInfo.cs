@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EstudoReact.Model")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9288c701fdc0ae361a1127bd4ea4667989d037f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("EstudoReact.Model")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EstudoReact.Model")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,32 +1,7 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.server\\controllers\\compradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|solutionrelative:estudoreact.server\\controllers\\compradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}|estudoreact.client\\estudoreact.client.esproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.client\\src\\pages\\compradores.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}|estudoreact.client\\estudoreact.client.esproj|solutionrelative:estudoreact.client\\src\\pages\\compradores.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|solutionrelative:estudoreact.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.server\\controllers\\estadocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|solutionrelative:estudoreact.server\\controllers\\estadocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}|estudoreact.client\\estudoreact.client.esproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.client\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}|estudoreact.client\\estudoreact.client.esproj|solutionrelative:estudoreact.client\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|c:\\users\\sergiorezende-mtz\\source\\repos\\estudoreact\\estudoreact.server\\dto\\compradoresdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}|EstudoReact.Server\\EstudoReact.Server.csproj|solutionrelative:estudoreact.server\\dto\\compradoresdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "C:\\git\\EstudoReact\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -34,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -59,84 +34,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{99b8fa2f-ab90-4f57-9c32-949f146f1914}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Program.cs",
-              "RelativeDocumentMoniker": "EstudoReact.Server\\Program.cs",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Program.cs",
-              "RelativeToolTip": "EstudoReact.Server\\Program.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACAAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-29T01:19:35.589Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "EstadoController.cs",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Controllers\\EstadoController.cs",
-              "RelativeDocumentMoniker": "EstudoReact.Server\\Controllers\\EstadoController.cs",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Controllers\\EstadoController.cs",
-              "RelativeToolTip": "EstudoReact.Server\\Controllers\\EstadoController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-29T00:59:30.988Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "App.jsx",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\estudoreact.client\\src\\App.jsx",
-              "RelativeDocumentMoniker": "estudoreact.client\\src\\App.jsx",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\estudoreact.client\\src\\App.jsx",
-              "RelativeToolTip": "estudoreact.client\\src\\App.jsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2025-08-29T00:45:32.834Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "CompradoresDTO.cs",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\DTO\\CompradoresDTO.cs",
-              "RelativeDocumentMoniker": "EstudoReact.Server\\DTO\\CompradoresDTO.cs",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\DTO\\CompradoresDTO.cs",
-              "RelativeToolTip": "EstudoReact.Server\\DTO\\CompradoresDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-29T00:33:51.593Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CompradorController.cs",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Controllers\\CompradorController.cs",
-              "RelativeDocumentMoniker": "EstudoReact.Server\\Controllers\\CompradorController.cs",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Server\\Controllers\\CompradorController.cs",
-              "RelativeToolTip": "EstudoReact.Server\\Controllers\\CompradorController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-29T00:24:41.025Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Compradores.jsx",
-              "DocumentMoniker": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\estudoreact.client\\src\\pages\\Compradores.jsx",
-              "RelativeDocumentMoniker": "estudoreact.client\\src\\pages\\Compradores.jsx",
-              "ToolTip": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\estudoreact.client\\src\\pages\\Compradores.jsx",
-              "RelativeToolTip": "estudoreact.client\\src\\pages\\Compradores.jsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2025-08-29T00:22:32.183Z",
-              "EditorCaption": ""
             }
           ]
         },

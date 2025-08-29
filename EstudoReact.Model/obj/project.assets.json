@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Model\\EstudoReact.Model.csproj",
+      "projectUniqueName": "C:\\git\\EstudoReact\\EstudoReact.Model\\EstudoReact.Model.csproj",
       "projectName": "EstudoReact.Model",
-      "projectPath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Model\\EstudoReact.Model.csproj",
+      "projectPath": "C:\\git\\EstudoReact\\EstudoReact.Model\\EstudoReact.Model.csproj",
       "packagesPath": "C:\\Users\\sergiorezende-mtz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sergiorezende-mtz\\source\\repos\\EstudoReact\\EstudoReact.Model\\obj\\",
+      "outputPath": "C:\\git\\EstudoReact\\EstudoReact.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
