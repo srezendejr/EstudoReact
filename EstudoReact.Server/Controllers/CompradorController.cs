@@ -1,5 +1,6 @@
 ﻿using EstudoReact.Model;
 using EstudoReact.Server.DTO;
+using EstudoReact.Service;
 using EstudoReact.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,13 @@ namespace Estudo.UI.Server.Controllers
     public class CompradorController : ControllerBase
     {
         CompradorService _compradorService;
+        CidadeService _cidadeService;
+        EstadoService _estadoService;
         public CompradorController()
         {
             _compradorService = new CompradorService();
+            _cidadeService = new CidadeService();
+            _estadoService = new EstadoService();
         }
 
         [HttpGet(Name = "Listar")]
@@ -22,12 +27,17 @@ namespace Estudo.UI.Server.Controllers
             List<CompradoresDTO> dTOs = new List<CompradoresDTO>();
             foreach (Comprador item in compradores)
             {
+                item.Cidade = _cidadeService.SelecionaCidade(item.IdCidade);
+                item.Cidade.UF = _estadoService.SelecionaEstado(item.Cidade.IdUf);
                 dTOs.Add(new CompradoresDTO
                 {
                     Id = item.Id,
                     Nome = item.Nome,
-                    Cidade = item.Cidade.Nome,
-                    IdCidade = item.IdCidade
+                    CidadeNome = item.Cidade.Nome,
+                    IdCidade = item.IdCidade,
+                    Documento = item.Documento,
+                    IdEstado = item.Cidade.IdUf,
+                    EstadoNome = item.Cidade.UF.Nome
                 });
             }
             return dTOs;
@@ -37,12 +47,16 @@ namespace Estudo.UI.Server.Controllers
         public CompradoresDTO SelecionarComprador(int id)
         {
             Comprador comprador = _compradorService.SelecionaComprador(id);
+            comprador.Cidade = _cidadeService.SelecionaCidade(comprador.IdCidade);
+            comprador.Cidade.UF = _estadoService.SelecionaEstado(comprador.Cidade.IdUf);
             CompradoresDTO dTO = new CompradoresDTO()
             {
                 Id = comprador.Id,
                 Nome = comprador.Nome,
-                Cidade = comprador.Cidade.Nome,
-                IdCidade = comprador.IdCidade
+                CidadeNome = comprador.Cidade.Nome,
+                IdCidade = comprador.IdCidade,
+                IdEstado = comprador.Cidade.IdUf,
+                EstadoNome = comprador.Cidade.UF.Nome
             };
 
             return dTO;
@@ -51,7 +65,8 @@ namespace Estudo.UI.Server.Controllers
         [HttpPut("{id}", Name = "Alterar")]
         public void Alterarcomprador(CompradoresDTO comprador)
         {
-            Comprador comp = new Comprador { 
+            Comprador comp = new Comprador
+            {
                 Id = comprador.Id,
                 IdCidade = comprador.IdCidade,
                 Documento = comprador.Documento,
@@ -68,7 +83,8 @@ namespace Estudo.UI.Server.Controllers
                 Id = comprador.Id,
                 IdCidade = comprador.IdCidade,
                 Documento = comprador.Documento,
-                Nome = comprador.Nome
+                Nome = comprador.Nome,
+                Cidade = new Cidade { Id = comprador.IdCidade }
             };
             _compradorService.SalvarComprador(comp);
         }

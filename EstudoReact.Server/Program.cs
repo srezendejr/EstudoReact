@@ -16,6 +16,7 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins("https://localhost:58465/")
                    .AllowAnyHeader()
+                   .AllowAnyOrigin()
                    .AllowAnyMethod();
         });
 });
@@ -38,10 +39,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowSpecificOrigin");
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+
