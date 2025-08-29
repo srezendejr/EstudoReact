@@ -9,3 +9,11 @@
 /.vs/EstudoReact/CopilotIndices/17.14.1091.29919/SemanticSymbols.db-shm
 /.vs/EstudoReact/CopilotIndices/17.14.1091.29919/SemanticSymbols.db-wal
 *.vsidx
+/.vs/EstudoReact/v17/.suo
+/.vs/EstudoReact/v17/DocumentLayout.backup.json
+/.vs/EstudoReact/v17/DocumentLayout.json
+/EstudoReact.Server/bin/Debug/net8.0/EstudoReact.Server.dll
+/EstudoReact.Server/bin/Debug/net8.0/EstudoReact.Server.exe
+/EstudoReact.Server/bin/Debug/net8.0/EstudoReact.Server.pdb
+/EstudoReact.Server/obj/Debug/net8.0/ref/EstudoReact.Server.dll
+/EstudoReact.Server/obj/Debug/net8.0/refint/EstudoReact.Server.dll
