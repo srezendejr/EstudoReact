@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "estudoreact.client", "estudoreact.client\estudoreact.client.esproj", "{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudoReact.Server", "EstudoReact.Server\EstudoReact.Server.csproj", "{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudoReact.Data", "EstudoReact.Data\EstudoReact.Data.csproj", "{9A258788-50F1-4A18-9A62-A8015F545C27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudoReact.Model", "EstudoReact.Model\EstudoReact.Model.csproj", "{93437D78-B1A1-4158-A2DB-AA7C74B9FDCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudoReact.Service", "EstudoReact.Service\EstudoReact.Service.csproj", "{9A180959-BCAF-4096-A75E-469B1D92A5EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudoReact.Util", "EstudoReact.Util\EstudoReact.Util.csproj", "{575A3951-623B-4753-ABBE-F1EADC11FD10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BCFE4CB-FD46-A8F8-1412-9E26AF70D396}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7BD7440-E7C7-465F-81EA-2F53E5E307B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A258788-50F1-4A18-9A62-A8015F545C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A258788-50F1-4A18-9A62-A8015F545C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A258788-50F1-4A18-9A62-A8015F545C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A258788-50F1-4A18-9A62-A8015F545C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93437D78-B1A1-4158-A2DB-AA7C74B9FDCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93437D78-B1A1-4158-A2DB-AA7C74B9FDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93437D78-B1A1-4158-A2DB-AA7C74B9FDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93437D78-B1A1-4158-A2DB-AA7C74B9FDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A180959-BCAF-4096-A75E-469B1D92A5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A180959-BCAF-4096-A75E-469B1D92A5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A180959-BCAF-4096-A75E-469B1D92A5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A180959-BCAF-4096-A75E-469B1D92A5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{575A3951-623B-4753-ABBE-F1EADC11FD10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{575A3951-623B-4753-ABBE-F1EADC11FD10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{575A3951-623B-4753-ABBE-F1EADC11FD10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{575A3951-623B-4753-ABBE-F1EADC11FD10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FBD13E5-F932-432A-88D7-07EC39D90546}
+	EndGlobalSection
+EndGlobal

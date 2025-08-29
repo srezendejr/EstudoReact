@@ -1,0 +1,11 @@
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\bin\Debug\net8.0\EstudoReact.Model.deps.json
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\bin\Debug\net8.0\EstudoReact.Model.dll
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\bin\Debug\net8.0\EstudoReact.Model.pdb
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.AssemblyInfoInputs.cache
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.AssemblyInfo.cs
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.csproj.CoreCompileInputs.cache
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.dll
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\refint\EstudoReact.Model.dll
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\EstudoReact.Model.pdb
+C:\Users\sergiorezende-mtz\source\repos\EstudoReact\EstudoReact.Model\obj\Debug\net8.0\ref\EstudoReact.Model.dll

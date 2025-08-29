@@ -1,0 +1,6 @@
+@EstudoReact.Server_HostAddress = http://localhost:5186
+
+GET {{EstudoReact.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
