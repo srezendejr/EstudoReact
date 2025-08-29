@@ -18,7 +18,10 @@ namespace EstudoReact.Services
             {
                 if (ValidaComprador(comprador))
                 {
-                    _context.Salvar<Comprador>(comprador);
+                    if (comprador.Id == 0)
+                        _context.Salvar<Comprador>(comprador);
+                    else
+                        _context.Alterar<Comprador>(comprador);
                     _context.Commit().GetAwaiter().GetResult();
                 }
             }
@@ -86,8 +89,8 @@ namespace EstudoReact.Services
             }
 
             if (string.IsNullOrEmpty(comprador.Documento)
-                || !Util.Util.IsCpf(comprador.Documento)
-                || !Util.Util.IsCnpj(comprador.Documento)
+                || (comprador.Documento.Length == 11 && !Util.Util.IsCpf(comprador.Documento))
+                || (comprador.Documento.Length == 14 && !Util.Util.IsCnpj(comprador.Documento))
                )
             {
                 valida = false;

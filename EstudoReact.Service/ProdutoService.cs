@@ -12,7 +12,8 @@ namespace EstudoReact.Services
     public class ProdutoService
     {
         Context _context;
-        public ProdutoService() {
+        public ProdutoService()
+        {
             _context = new Context();
         }
 
@@ -22,7 +23,10 @@ namespace EstudoReact.Services
             {
                 if (ValidarProduto(produto))
                 {
-                    _context.Salvar<Produto>(produto);
+                    if (produto.Id == 0)
+                        _context.Salvar<Produto>(produto);
+                    else
+                        _context.Alterar<Produto>(produto);
                     _context.Commit().GetAwaiter().GetResult();
                 }
             }
@@ -64,7 +68,7 @@ namespace EstudoReact.Services
         {
             bool validado = true;
             var listProdutoPedido = _context.ItensPedido.Where(w => w.IdProduto == produto.Id).ToList();
-            if(listProdutoPedido.Count > 0)
+            if (listProdutoPedido.Count > 0)
             {
                 validado = false;
                 throw new Exception("Não é possível excluir o produto, pois há pedido para ele.");

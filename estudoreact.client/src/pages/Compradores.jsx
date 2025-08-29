@@ -2,61 +2,122 @@
 
 function Compradores() {
     const [compradores, setCompradores] = useState([]);
-    const [novoComprador, setNovoComprador] = useState({ id: null, nome: '', cidade: '' });
+    const [estados, setEstados] = useState([]);
+    const [cidades, setCidades] = useState([]);
+
+    const [novoComprador, setNovoComprador] = useState({
+        id: 0,
+        nome: '',
+        documento: '',
+        idEstado: '',
+        idCidade: '',
+        estadoNome: '',
+        cidadeNome: ''
+    });
+
     const [modoEdicao, setModoEdicao] = useState(false);
 
-    const API_URL = 'https://localhost:7048' ; // Altere para sua API real
+    const API_URL = 'https://localhost:7048';
 
-    // Carregar compradores da API
     useEffect(() => {
-        fetch(API_URL + '/Comprador', { method: 'GET' })
-            .then((res) => res.json())
-            .then((data) => setCompradores(data))
-            .catch((err) => console.error('Erro ao carregar compradores:', err));
+        // Buscar compradores
+        fetch(API_URL + '/Comprador')
+            .then(res => res.json())
+            .then(data => setCompradores(data))
+            .catch(err => console.error('Erro ao carregar compradores:', err));
+
+        // Buscar estados
+        fetch(API_URL + '/Estado')
+            .then(res => res.json())
+            .then(data => setEstados(data))
+            .catch(err => console.error('Erro ao carregar estados:', err));
     }, []);
 
-    // Atualiza campos de formulário
+    useEffect(() => {
+        if (novoComprador.idEstado) {
+            fetch(API_URL + '/Cidade/' + novoComprador.idEstado + '/Cidade')
+                .then(res => res.json())
+                .then(data => setCidades(data))
+                .catch(err => console.error('Erro ao carregar cidades:', err));
+        } else {
+            setCidades([]);
+            setNovoComprador(prev => ({ ...prev, idCidade: '', cidadeNome: '' })); // Limpa cidade ao mudar estado
+        }
+    }, [novoComprador.idEstado]);
+
     const handleChange = (e) => {
-        setNovoComprador({ ...novoComprador, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        if (name === 'idEstado') {
+            // Quando muda o estado, atualizar idestado e estadonome
+            const estadoSelecionado = estados.find(e => e.id === value);
+            setNovoComprador(prev => ({
+                ...prev,
+                idEstado: value,
+                estadoNome: estadoSelecionado ? estadoSelecionado.nome : '',
+                idCidade: '',
+                cidadeNome: '',
+            }));
+        } else if (name === 'idCidade') {
+            // Quando muda a cidade, atualizar idcidade e cidadenome
+            const cidadeSelecionada = cidades.find(c => c.id === value);
+            setNovoComprador(prev => ({
+                ...prev,
+                idCidade: value,
+                cidadeNome: cidadeSelecionada ? cidadeSelecionada.nome : '',
+            }));
+        } else {
+            setNovoComprador(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
-    // Adicionar novo comprador
     const adicionarComprador = () => {
-        if (!novoComprador.nome || !novoComprador.cidade) return;
+        if (!novoComprador.nome || !novoComprador.documento || !novoComprador.idEstado || !novoComprador.idEstado) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
 
-        fetch(API_URL, {
+        fetch(API_URL + '/Comprador', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(novoComprador),
         })
-            .then((res) => res.json())
-            .then((data) => {
+            .then(res => res.json())
+            .then(data => {
                 setCompradores([...compradores, data]);
-                setNovoComprador({ id: null, nome: '', cidade: '' });
-            });
+                resetForm();
+            })
+            .catch(err => console.error('Erro ao adicionar comprador:', err));
     };
 
-    // Editar comprador (preencher formulário)
     const iniciarEdicao = (comprador) => {
         setModoEdicao(true);
         setNovoComprador(comprador);
     };
 
-    // Salvar edição
     const salvarEdicao = () => {
-        fetch(`${API_URL}/${novoComprador.id}`, {
+        fetch(API_URL + '/Comprador/' + novoComprador.id, {  // Template string corrigida
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(novoComprador),
         })
-            .then((res) => res.json())
+            .then(res => res.json())
             .then((dataAtualizada) => {
                 setCompradores(
                     compradores.map((c) => (c.id === dataAtualizada.id ? dataAtualizada : c))
                 );
-                setModoEdicao(false);
-                setNovoComprador({ id: null, nome: '', cidade: '' });
-            });
+                resetForm();
+            })
+            .catch(err => console.error('Erro ao salvar edição:', err));
+    };
+
+    const resetForm = () => {
+        setModoEdicao(false);
+        setNovoComprador({ id: null, nome: '', documento: '', idestado: '', idCidade: '', estadonome: '', cidadeNome: '' });
+        setCidades([]);
     };
 
     return (
@@ -68,6 +129,8 @@ function Compradores() {
                     <tr>
                         <th>Código</th>
                         <th>Nome</th>
+                        <th>Documento</th>
+                        <th>Estado</th>
                         <th>Cidade</th>
                         <th>Ações</th>
                     </tr>
@@ -77,7 +140,9 @@ function Compradores() {
                         <tr key={c.id}>
                             <td>{c.id}</td>
                             <td>{c.nome}</td>
-                            <td>{c.cidade}</td>
+                            <td>{c.documento}</td>
+                            <td>{c.estadoNome}</td>
+                            <td>{c.cidadeNome}</td>
                             <td>
                                 <button onClick={() => iniciarEdicao(c)}>Editar</button>
                             </td>
@@ -101,16 +166,48 @@ function Compradores() {
                 />
                 <input
                     type="text"
-                    name="cidade"
-                    placeholder="Cidade"
-                    value={novoComprador.cidade}
+                    name="documento"
+                    placeholder="Documento"
+                    value={novoComprador.documento}
                     onChange={handleChange}
+                    style={{ marginRight: '10px' }}
                 />
+                <select
+                    name="idEstado"
+                    value={novoComprador.idEstado}
+                    onChange={handleChange}
+                    style={{ marginRight: '10px' }}
+                >
+                    <option value="">Selecione um estado</option>
+                    {estados.map((uf) => (
+                        <option key={uf.id} value={uf.id}>
+                            {uf.nome}
+                        </option>
+                    ))}
+                </select>
+                <select
+                    name="idCidade"
+                    value={novoComprador.idCidade}
+                    onChange={handleChange}
+                >
+                    <option value="">Selecione uma cidade</option>
+                    {cidades.map((cidade) => (
+                        <option key={cidade.id} value={cidade.id}>
+                            {cidade.nome}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <button onClick={modoEdicao ? salvarEdicao : adicionarComprador}>
                 {modoEdicao ? 'Salvar' : 'Adicionar'}
             </button>
+
+            {modoEdicao && (
+                <button onClick={resetForm} style={{ marginLeft: '10px' }}>
+                    Cancelar
+                </button>
+            )}
         </div>
     );
 }

@@ -23,7 +23,10 @@ namespace EstudoReact.Services
             {
                 if (ValidaPedido(pedido))
                 {
-                    _context.Salvar<Pedido>(pedido);
+                    if (pedido.Id == 0)
+                        _context.Salvar<Pedido>(pedido);
+                    else
+                        _context.Alterar<Pedido>(pedido);
                     _context.Commit().GetAwaiter().GetResult();
                 }
             }
