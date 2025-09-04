@@ -44,6 +44,9 @@ namespace EstudoReact.Services
             try
             {
                 Comprador comprador = SelecionaComprador(id);
+                if (comprador == null)
+                    throw new Exception("Comprador não encontrado");
+
                 if (ValidarExcluirComprador(comprador))
                 {
                     _context.Excluir<Comprador>(comprador);
