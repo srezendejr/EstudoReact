@@ -63,7 +63,7 @@ namespace Estudo.UI.Server.Controllers
         }
 
         [HttpPut("{id}", Name = "Alterar")]
-        public void Alterarcomprador(CompradoresDTO comprador)
+        public CompradoresDTO Alterarcomprador(CompradoresDTO comprador)
         {
             Comprador comp = new Comprador
             {
@@ -73,10 +73,11 @@ namespace Estudo.UI.Server.Controllers
                 Nome = comprador.Nome
             };
             _compradorService.SalvarComprador(comp);
+            return comprador;
         }
 
         [HttpPost(Name = "Incluir")]
-        public void Incluircomprador(CompradoresDTO comprador)
+        public CompradoresDTO Incluircomprador(CompradoresDTO comprador)
         {
             Comprador comp = new Comprador
             {
@@ -87,6 +88,7 @@ namespace Estudo.UI.Server.Controllers
                 Cidade = new Cidade { Id = comprador.IdCidade }
             };
             _compradorService.SalvarComprador(comp);
+            return comprador;
         }
 
         [HttpDelete("{id}", Name = "Excluir")]

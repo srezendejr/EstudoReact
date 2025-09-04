@@ -5,6 +5,10 @@ function Compradores() {
     const [estados, setEstados] = useState([]);
     const [cidades, setCidades] = useState([]);
 
+    const [carregando, setCarregando] = useState(false);
+    const [mensagem, setMensagem] = useState('');
+    const [erro, setErro] = useState('');
+
     const [novoComprador, setNovoComprador] = useState({
         id: 0,
         nome: '',
@@ -19,18 +23,32 @@ function Compradores() {
 
     const API_URL = 'https://localhost:7048';
 
-    useEffect(() => {
-        // Buscar compradores
+    const exibirMensagem = (texto, tipo = 'sucesso') => {
+        if (tipo === 'erro') {
+            setErro(texto);
+            setTimeout(() => setErro(''), 4000);
+        } else {
+            setMensagem(texto);
+            setTimeout(() => setMensagem(''), 4000);
+        }
+    };
+
+    const buscarCompradores = () => {
+        setCarregando(true);
         fetch(API_URL + '/Comprador')
             .then(res => res.json())
             .then(data => setCompradores(data))
-            .catch(err => console.error('Erro ao carregar compradores:', err));
+            .catch(err => exibirMensagem('Erro ao carregar compradores.' + err, 'erro'))
+            .finally(() => setCarregando(false));
+    };
 
-        // Buscar estados
+    useEffect(() => {
+        buscarCompradores();
+
         fetch(API_URL + '/Estado')
             .then(res => res.json())
             .then(data => setEstados(data))
-            .catch(err => console.error('Erro ao carregar estados:', err));
+            .catch(err => exibirMensagem('Erro ao carregar estados.' + err, 'erro'));
     }, []);
 
     useEffect(() => {
@@ -38,32 +56,42 @@ function Compradores() {
             fetch(API_URL + '/Cidade/' + novoComprador.idEstado + '/Cidade')
                 .then(res => res.json())
                 .then(data => setCidades(data))
-                .catch(err => console.error('Erro ao carregar cidades:', err));
+                .catch(err => exibirMensagem('Erro ao carregar cidades.' + err, 'erro'));
         } else {
             setCidades([]);
-            setNovoComprador(prev => ({ ...prev, idCidade: '', cidadeNome: '' })); // Limpa cidade ao mudar estado
+            setNovoComprador(prev => ({ ...prev, idCidade: '', cidadeNome: '' }));
         }
     }, [novoComprador.idEstado]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === 'idEstado') {
-            // Quando muda o estado, atualizar idestado e estadonome
-            const estadoSelecionado = estados.find(e => e.id === value);
+        if (name === 'documento') {
+            // Permitir apenas números
+            const somenteNumeros = value.replace(/\D/g, '').slice(0, 14);
             setNovoComprador(prev => ({
                 ...prev,
-                idEstado: value,
+                [name]: somenteNumeros
+            }));
+            return;
+        }
+
+        if (name === 'idEstado') {
+            const id = parseInt(value);
+            const estadoSelecionado = estados.find(e => e.id === id);
+            setNovoComprador(prev => ({
+                ...prev,
+                idEstado: id,
                 estadoNome: estadoSelecionado ? estadoSelecionado.nome : '',
                 idCidade: '',
                 cidadeNome: '',
             }));
         } else if (name === 'idCidade') {
-            // Quando muda a cidade, atualizar idcidade e cidadenome
-            const cidadeSelecionada = cidades.find(c => c.id === value);
+            const id = parseInt(value);
+            const cidadeSelecionada = cidades.find(c => c.id === id);
             setNovoComprador(prev => ({
                 ...prev,
-                idCidade: value,
+                idCidade: id,
                 cidadeNome: cidadeSelecionada ? cidadeSelecionada.nome : '',
             }));
         } else {
@@ -75,11 +103,12 @@ function Compradores() {
     };
 
     const adicionarComprador = () => {
-        if (!novoComprador.nome || !novoComprador.documento || !novoComprador.idEstado || !novoComprador.idEstado) {
-            alert('Por favor, preencha todos os campos.');
+        if (!novoComprador.nome || !novoComprador.documento || !novoComprador.idEstado || !novoComprador.idCidade) {
+            exibirMensagem('Por favor, preencha todos os campos.');
             return;
         }
 
+        setCarregando(true);
         fetch(API_URL + '/Comprador', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -89,40 +118,91 @@ function Compradores() {
             .then(data => {
                 setCompradores([...compradores, data]);
                 resetForm();
+                exibirMensagem('Comprador adicionado com sucesso!');
             })
-            .catch(err => console.error('Erro ao adicionar comprador:', err));
+            .catch(err => exibirMensagem('Erro ao adicionar comprador.' + err, 'erro'))
+            .finally(() => setCarregando(false));
     };
 
     const iniciarEdicao = (comprador) => {
         setModoEdicao(true);
-        setNovoComprador(comprador);
+        const estado = estados.find(e => e.id === comprador.idEstado);
+        const cidade = cidades.find(c => c.id === comprador.idCidade);
+
+        setNovoComprador({
+            ...comprador,
+            estadoNome: estado ? estado.nome : '',
+            cidadeNome: cidade ? cidade.nome : ''
+        });
+
+        if (comprador.idEstado) {
+            fetch(API_URL + '/Cidade/' + comprador.idEstado + '/Cidade')
+                .then(res => res.json())
+                .then(data => setCidades(data))
+                .catch(err => exibirMensagem('Erro ao carregar cidades.' + err, 'erro'));
+        } else {
+            setCidades([]);
+        }
+    };
+
+    const iniciarExclusao = (comprador) => {
+        if (window.confirm(`Deseja realmente excluir o comprador ${comprador.nome}?`)) {
+            setCarregando(true);
+            fetch(API_URL + '/Comprador/' + comprador.id, {
+                method: 'DELETE'
+            })
+                .then(() => {
+                    setCompradores(compradores.filter(c => c.id !== comprador.id));
+                    exibirMensagem('Comprador excluído com sucesso!');
+                })
+                .catch(err => exibirMensagem('Erro ao excluir comprador.' + err, 'erro'))
+                .finally(() => setCarregando(false));
+        }
     };
 
     const salvarEdicao = () => {
-        fetch(API_URL + '/Comprador/' + novoComprador.id, {  // Template string corrigida
+        if (!novoComprador.nome || !novoComprador.documento || !novoComprador.idEstado || !novoComprador.idCidade) {
+            exibirMensagem('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        setCarregando(true);
+        const payload = {
+            id: novoComprador.id,
+            nome: novoComprador.nome,
+            documento: novoComprador.documento,
+            idEstado: parseInt(novoComprador.idEstado),
+            idCidade: parseInt(novoComprador.idCidade)
+        };
+
+        fetch(API_URL + '/Comprador/' + novoComprador.id, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(novoComprador),
+            body: JSON.stringify(payload),
         })
             .then(res => res.json())
-            .then((dataAtualizada) => {
-                setCompradores(
-                    compradores.map((c) => (c.id === dataAtualizada.id ? dataAtualizada : c))
-                );
+            .then(dataAtualizada => {
+                setCompradores(compradores.map(c => c.id === dataAtualizada.id ? dataAtualizada : c));
                 resetForm();
+                exibirMensagem('Comprador atualizado com sucesso!');
             })
-            .catch(err => console.error('Erro ao salvar edição:', err));
+            .catch(err => exibirMensagem('Erro ao salvar edição.' + err, 'erro'))
+            .finally(() => setCarregando(false));
     };
 
     const resetForm = () => {
         setModoEdicao(false);
-        setNovoComprador({ id: null, nome: '', documento: '', idestado: '', idCidade: '', estadonome: '', cidadeNome: '' });
+        setNovoComprador({ id: 0, nome: '', documento: '', idEstado: '', idCidade: '', estadoNome: '', cidadeNome: '' });
         setCidades([]);
     };
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial' }}>
             <h2>📋 Lista de Compradores</h2>
+
+            {carregando && <div style={{ color: 'blue', marginBottom: '10px' }}>Carregando...</div>}
+            {mensagem && <div style={{ color: 'green', marginBottom: '10px' }}>{mensagem}</div>}
+            {erro && <div style={{ color: 'red', marginBottom: '10px' }}>{erro}</div>}
 
             <table border="1" cellPadding="8" cellSpacing="0">
                 <thead>
@@ -132,7 +212,8 @@ function Compradores() {
                         <th>Documento</th>
                         <th>Estado</th>
                         <th>Cidade</th>
-                        <th>Ações</th>
+                        <th>Alterar</th>
+                        <th>Excluir</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,7 +225,10 @@ function Compradores() {
                             <td>{c.estadoNome}</td>
                             <td>{c.cidadeNome}</td>
                             <td>
-                                <button onClick={() => iniciarEdicao(c)}>Editar</button>
+                                <button onClick={() => iniciarEdicao(c)} disabled={carregando}>Editar</button>
+                            </td>
+                            <td>
+                                <button onClick={() => iniciarExclusao(c)} disabled={carregando}>Excluir</button>
                             </td>
                         </tr>
                     ))}
@@ -163,20 +247,35 @@ function Compradores() {
                     value={novoComprador.nome}
                     onChange={handleChange}
                     style={{ marginRight: '10px' }}
+                    disabled={carregando}
                 />
                 <input
                     type="text"
                     name="documento"
                     placeholder="Documento"
                     value={novoComprador.documento}
+                    inputMode="numeric"
+                    pattern="\d*"
                     onChange={handleChange}
+                    maxLength={14}
                     style={{ marginRight: '10px' }}
+                    disabled={carregando}
+                    onPaste={(e) => {
+                        // Pega o texto que o usuário tentou colar
+                        const paste = e.clipboardData.getData('text');
+
+                        // Verifica se o texto contém só números
+                        if (!/^\d+$/.test(paste)) {
+                            e.preventDefault(); // bloqueia o paste se tiver caracteres não numéricos
+                        }
+                    }}
                 />
                 <select
                     name="idEstado"
                     value={novoComprador.idEstado}
                     onChange={handleChange}
                     style={{ marginRight: '10px' }}
+                    disabled={carregando}
                 >
                     <option value="">Selecione um estado</option>
                     {estados.map((uf) => (
@@ -189,6 +288,7 @@ function Compradores() {
                     name="idCidade"
                     value={novoComprador.idCidade}
                     onChange={handleChange}
+                    disabled={carregando}
                 >
                     <option value="">Selecione uma cidade</option>
                     {cidades.map((cidade) => (
@@ -199,12 +299,12 @@ function Compradores() {
                 </select>
             </div>
 
-            <button onClick={modoEdicao ? salvarEdicao : adicionarComprador}>
+            <button onClick={modoEdicao ? salvarEdicao : adicionarComprador} disabled={carregando}>
                 {modoEdicao ? 'Salvar' : 'Adicionar'}
             </button>
 
             {modoEdicao && (
-                <button onClick={resetForm} style={{ marginLeft: '10px' }}>
+                <button onClick={resetForm} style={{ marginLeft: '10px' }} disabled={carregando}>
                     Cancelar
                 </button>
             )}
