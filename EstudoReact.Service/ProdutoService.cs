@@ -27,7 +27,7 @@ namespace EstudoReact.Services
                         _context.Salvar<Produto>(produto);
                     else
                         _context.Alterar<Produto>(produto);
-                    _context.Commit().GetAwaiter().GetResult();
+                    _context.Commit();
                 }
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace EstudoReact.Services
                 if (ValidarExcluirProduto(produto))
                 {
                     _context.Excluir<Produto>(produto);
-                    _context.Commit().GetAwaiter().GetResult();
+                    _context.Commit();
                 }
             }
             catch (Exception ex)

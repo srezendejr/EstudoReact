@@ -5,101 +5,89 @@ namespace EstudoReact.Services
 {
     public class CompradorService
     {
-        Context _context;
+        private readonly Context _context;
 
-        public CompradorService()
+        public CompradorService(Context context)
         {
-            _context = new Context();
+            _context = context;
         }
 
-        public void SalvarComprador(Comprador comprador)
+        public async Task SalvarComprador(Comprador comprador)
         {
             try
             {
-                if (ValidaComprador(comprador))
-                {
-                    if (comprador.Id == 0)
-                        _context.Salvar<Comprador>(comprador);
-                    else
-                        _context.Alterar<Comprador>(comprador);
-                    _context.Commit().GetAwaiter().GetResult();
-                }
+                ValidarComprador(comprador);
+
+                if (comprador.Id == 0)
+                    _context.Salvar<Comprador>(comprador);
+                else
+                    _context.Alterar<Comprador>(comprador);
+
+                _context.Commit();
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
+        }
+        public Comprador SelecionaComprador(int id)
+        {
+            return _context.Compradores.FirstOrDefault(f => f.Id == id);
         }
         public List<Comprador> ListaCompradores()
         {
             return _context.Compradores.ToList();
         }
 
-        public Comprador SelecionaComprador(int id)
+        public Comprador ObterCompradorPorId(int id)
         {
             return _context.Compradores.FirstOrDefault(c => c.Id == id);
         }
+
         public void ExcluirComprador(int id)
         {
             try
             {
-                Comprador comprador = SelecionaComprador(id);
-                if (comprador == null)
-                    throw new Exception("Comprador não encontrado");
+                var comprador = ObterCompradorPorId(id) ?? throw new Exception("Comprador não encontrado");
 
-                if (ValidarExcluirComprador(comprador))
-                {
-                    _context.Excluir<Comprador>(comprador);
-                    _context.Commit().GetAwaiter().GetResult();
-                }
+                ValidarExcluirComprador(comprador);
+
+                _context.Excluir<Comprador>(comprador);
+                _context.Commit();
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
-        private bool ValidarExcluirComprador(Comprador comprador)
+        private void ValidarExcluirComprador(Comprador comprador)
         {
-            bool validado = true;
-            var lstComprador = _context.Pedidos.Where(w => w.IdComprador == comprador.Id).ToList();
-            if (lstComprador.Count > 0)
-            {
-                validado = false;
-                throw new Exception("Não é possível excluir o comprador, pois há pedido para ele.");
-            }
-            return validado;
+            var pedidos = _context.Pedidos.Where(w => w.IdComprador == comprador.Id).ToList();
+            if (pedidos.Any())
+                throw new Exception("Não é possível excluir o comprador, pois há pedidos para ele.");
         }
-        private bool ValidaComprador(Comprador comprador)
+
+        private void ValidarComprador(Comprador comprador)
         {
-            bool valida = true;
             if (comprador == null)
-            {
-                valida = false;
                 throw new Exception("Comprador inválido");
-            }
 
             if (comprador.IdCidade == 0)
-            {
-                valida = false;
                 throw new Exception("Informe uma cidade válida para o comprador");
-            }
 
-            if (string.IsNullOrEmpty(comprador.Nome))
-            {
-                valida = false;
+            if (string.IsNullOrWhiteSpace(comprador.Nome))
                 throw new Exception("Informe um nome para o comprador");
-            }
 
-            if (string.IsNullOrEmpty(comprador.Documento)
-                || (comprador.Documento.Length == 11 && !Util.Util.IsCpf(comprador.Documento))
-                || (comprador.Documento.Length == 14 && !Util.Util.IsCnpj(comprador.Documento))
-               )
-            {
-                valida = false;
+            if (!DocumentoValido(comprador.Documento))
                 throw new Exception("Informe um documento válido");
-            }
-            return valida;
+        }
+
+        private bool DocumentoValido(string documento)
+        {
+            return (!string.IsNullOrEmpty(documento)) &&
+                   ((documento.Length == 11 && Util.Util.IsCpf(documento)) ||
+                    (documento.Length == 14 && Util.Util.IsCnpj(documento)));
         }
     }
 }

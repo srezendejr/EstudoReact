@@ -27,7 +27,7 @@ namespace EstudoReact.Services
                         _context.Salvar<Pedido>(pedido);
                     else
                         _context.Alterar<Pedido>(pedido);
-                    _context.Commit().GetAwaiter().GetResult();
+                    _context.Commit();
                 }
             }
             catch (Exception ex)
@@ -52,7 +52,7 @@ namespace EstudoReact.Services
             {
                 Pedido pedido = SelecionarPedido(id);
                 _context.Excluir<Pedido>(pedido);
-                _context.Commit().GetAwaiter().GetResult();
+                _context.Commit();
             }
             catch (Exception ex)
             {

@@ -36,9 +36,13 @@ namespace EstudoReact.Data
             Mapping.Map(modelBuilder);
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             await base.SaveChangesAsync();
+        }
+        public void Commit()
+        {
+            base.SaveChanges();
         }
 
         public void Salvar<T>(T entity) where T : class

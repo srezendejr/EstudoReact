@@ -26,6 +26,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<CompradorService>();
 builder.Services.AddScoped<CidadeService>();
 builder.Services.AddScoped<EstadoService>();
+builder.Services.AddScoped<Context>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var connectionString = builder.Configuration.GetConnectionString("BancoDados");
