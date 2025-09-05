@@ -1,4 +1,7 @@
 using EstudoReact.Data;
+using EstudoReact.Server.Mapping;
+using EstudoReact.Service;
+using EstudoReact.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +23,11 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
+builder.Services.AddScoped<CompradorService>();
+builder.Services.AddScoped<CidadeService>();
+builder.Services.AddScoped<EstadoService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 var connectionString = builder.Configuration.GetConnectionString("BancoDados");
 
 builder.Services.AddDbContext<Context>(options =>

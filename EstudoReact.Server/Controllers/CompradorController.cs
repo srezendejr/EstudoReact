@@ -1,4 +1,5 @@
-﻿using EstudoReact.Model;
+﻿using AutoMapper;
+using EstudoReact.Model;
 using EstudoReact.Server.DTO;
 using EstudoReact.Service;
 using EstudoReact.Services;
@@ -10,91 +11,82 @@ namespace Estudo.UI.Server.Controllers
     [Route("[controller]")]
     public class CompradorController : ControllerBase
     {
-        CompradorService _compradorService;
-        CidadeService _cidadeService;
-        EstadoService _estadoService;
-        public CompradorController()
+        private readonly CompradorService _compradorService;
+        private readonly CidadeService _cidadeService;
+        private readonly EstadoService _estadoService;
+        private readonly IMapper _mapper;
+        public CompradorController( CompradorService compradorService,
+                                    CidadeService cidadeService,
+                                    EstadoService estadoService,
+                                    IMapper mapper
+                                  )
         {
-            _compradorService = new CompradorService();
-            _cidadeService = new CidadeService();
-            _estadoService = new EstadoService();
+            _compradorService = compradorService;
+            _cidadeService = cidadeService;
+            _estadoService = estadoService;
+            _mapper = mapper;
         }
 
         [HttpGet(Name = "Listar")]
-        public IEnumerable<CompradoresDTO> SelecionaCompradores()
+        public ActionResult<IEnumerable<CompradoresDTO>> SelecionaCompradores()
         {
             List<Comprador> compradores = _compradorService.ListaCompradores();
-            List<CompradoresDTO> dTOs = new List<CompradoresDTO>();
             foreach (Comprador item in compradores)
             {
                 item.Cidade = _cidadeService.SelecionaCidade(item.IdCidade);
                 item.Cidade.UF = _estadoService.SelecionaEstado(item.Cidade.IdUf);
-                dTOs.Add(new CompradoresDTO
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    CidadeNome = item.Cidade.Nome,
-                    IdCidade = item.IdCidade,
-                    Documento = item.Documento,
-                    IdEstado = item.Cidade.IdUf,
-                    EstadoNome = item.Cidade.UF.Nome
-                });
             }
-            return dTOs;
+            List<CompradoresDTO> dtos = _mapper.Map<List<CompradoresDTO>>(compradores);
+            return Ok(dtos);
         }
 
         [HttpGet("{id}", Name = "Selecionar")]
-        public CompradoresDTO SelecionarComprador(int id)
+        public ActionResult<CompradoresDTO> SelecionarComprador(int id)
         {
             Comprador comprador = _compradorService.SelecionaComprador(id);
+            if (comprador == null)
+                return NotFound();
+
             comprador.Cidade = _cidadeService.SelecionaCidade(comprador.IdCidade);
             comprador.Cidade.UF = _estadoService.SelecionaEstado(comprador.Cidade.IdUf);
-            CompradoresDTO dTO = new CompradoresDTO()
-            {
-                Id = comprador.Id,
-                Nome = comprador.Nome,
-                CidadeNome = comprador.Cidade.Nome,
-                IdCidade = comprador.IdCidade,
-                IdEstado = comprador.Cidade.IdUf,
-                EstadoNome = comprador.Cidade.UF.Nome
-            };
+            CompradoresDTO dto = _mapper.Map<CompradoresDTO>(comprador);
+            if (comprador == null)
+                return NotFound();
 
-            return dTO;
+            return Ok(dto);
         }
 
         [HttpPut("{id}", Name = "Alterar")]
-        public CompradoresDTO Alterarcomprador(CompradoresDTO comprador)
+        public IActionResult AlterarComprador(int id, CompradoresDTO comprador)
         {
-            Comprador comp = new Comprador
-            {
-                Id = comprador.Id,
-                IdCidade = comprador.IdCidade,
-                Documento = comprador.Documento,
-                Nome = comprador.Nome
-            };
-            _compradorService.SalvarComprador(comp);
-            return comprador;
+            if (id != comprador.Id)
+                return BadRequest("ID da rota difere do ID do comprador.");
+
+            var entidade = _mapper.Map<Comprador>(comprador);
+            _compradorService.SalvarComprador(entidade);
+            comprador.CidadeNome = _cidadeService.SelecionaCidade(comprador.IdCidade).Nome;
+            comprador.EstadoNome = _estadoService.SelecionaEstado(comprador.IdEstado).Nome;
+            return Ok(comprador);
         }
 
         [HttpPost(Name = "Incluir")]
-        public CompradoresDTO Incluircomprador(CompradoresDTO comprador)
+        public IActionResult IncluirComprador(CompradoresDTO comprador)
         {
-            Comprador comp = new Comprador
-            {
-                Id = comprador.Id,
-                IdCidade = comprador.IdCidade,
-                Documento = comprador.Documento,
-                Nome = comprador.Nome,
-                Cidade = new Cidade { Id = comprador.IdCidade }
-            };
-            _compradorService.SalvarComprador(comp);
-            return comprador;
+            var entidade = _mapper.Map<Comprador>(comprador);
+
+            _compradorService.SalvarComprador(entidade);
+            return CreatedAtRoute("Selecionar", new { id = entidade.Id }, comprador);
         }
 
         [HttpDelete("{id}", Name = "Excluir")]
-        public void Excluircomprador(int id)
+        public IActionResult ExcluirComprador(int id)
         {
+            var comprador = _compradorService.SelecionaComprador(id);
+            if (comprador == null)
+                return NotFound();
+
             _compradorService.ExcluirComprador(id);
+            return NoContent();
         }
     }
 }
