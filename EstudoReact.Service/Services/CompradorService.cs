@@ -1,7 +1,8 @@
 ﻿using EstudoReact.Model;
 using EstudoReact.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace EstudoReact.Services
+namespace EstudoReact.Service.Services
 {
     public class CompradorService
     {
@@ -19,9 +20,9 @@ namespace EstudoReact.Services
                 ValidarComprador(comprador);
 
                 if (comprador.Id == 0)
-                    _context.Salvar<Comprador>(comprador);
+                    _context.Salvar(comprador);
                 else
-                    _context.Alterar<Comprador>(comprador);
+                    _context.Alterar(comprador);
 
                 _context.Commit();
             }
@@ -30,29 +31,29 @@ namespace EstudoReact.Services
                 throw;
             }
         }
-        public Comprador SelecionaComprador(int id)
+        public async Task<Comprador> SelecionaComprador(int id)
         {
-            return _context.Compradores.FirstOrDefault(f => f.Id == id);
+            return await _context.Compradores.FindAsync(id);
         }
-        public List<Comprador> ListaCompradores()
+        public async Task<List<Comprador>> ListaCompradores()
         {
-            return _context.Compradores.ToList();
-        }
-
-        public Comprador ObterCompradorPorId(int id)
-        {
-            return _context.Compradores.FirstOrDefault(c => c.Id == id);
+            return await _context.Compradores.ToListAsync();
         }
 
-        public void ExcluirComprador(int id)
+        public async Task<Comprador> ObterCompradorPorId(int id)
+        {
+            return await _context.Compradores.FindAsync(id);
+        }
+
+        public async Task ExcluirComprador(int id)
         {
             try
             {
-                var comprador = ObterCompradorPorId(id) ?? throw new Exception("Comprador não encontrado");
+                Comprador comprador = await ObterCompradorPorId(id) ?? throw new Exception("Comprador não encontrado");
 
-                ValidarExcluirComprador(comprador);
+                await ValidarExcluirComprador(comprador);
 
-                _context.Excluir<Comprador>(comprador);
+                _context.Excluir(comprador);
                 _context.Commit();
             }
             catch
@@ -61,10 +62,10 @@ namespace EstudoReact.Services
             }
         }
 
-        private void ValidarExcluirComprador(Comprador comprador)
+        private async Task ValidarExcluirComprador(Comprador comprador)
         {
-            var pedidos = _context.Pedidos.Where(w => w.IdComprador == comprador.Id).ToList();
-            if (pedidos.Any())
+            var pedidos = await _context.Pedidos.FindAsync(comprador.Id);
+            if (pedidos == null)
                 throw new Exception("Não é possível excluir o comprador, pois há pedidos para ele.");
         }
 
@@ -85,9 +86,9 @@ namespace EstudoReact.Services
 
         private bool DocumentoValido(string documento)
         {
-            return (!string.IsNullOrEmpty(documento)) &&
-                   ((documento.Length == 11 && Util.Util.IsCpf(documento)) ||
-                    (documento.Length == 14 && Util.Util.IsCnpj(documento)));
+            return !string.IsNullOrEmpty(documento) &&
+                   (documento.Length == 11 && Util.Util.IsCpf(documento) ||
+                    documento.Length == 14 && Util.Util.IsCnpj(documento));
         }
     }
 }

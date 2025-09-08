@@ -1,36 +1,49 @@
 ﻿using EstudoReact.Model;
-using EstudoReact.Service;
-using EstudoReact.Services;
+using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstudoReact.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CidadeController : ControllerBase
     {
-        CidadeService _cidadeService;
-        public CidadeController()
+        private readonly CidadeService _cidadeService;
+
+        public CidadeController(CidadeService cidadeService)
         {
-            _cidadeService = new CidadeService();
+            _cidadeService = cidadeService;
         }
 
-        [HttpGet(Name = "Cidades")]
-        public IEnumerable<Cidade> ListaCidades()
+        // GET: api/Cidade
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Cidade>>> ListaCidades()
         {
-            return _cidadeService.ListaCidades();
+            var cidades = await _cidadeService.ListaCidades();
+            return Ok(cidades);
         }
 
-        [HttpGet("{id}", Name = "Cidade")]
-        public Cidade SelecionaCidades(int id)
+        // GET: api/Cidade/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Cidade>> SelecionaCidade(int id)
         {
-            return _cidadeService.SelecionaCidade(id);
+            try
+            {
+                var cidade = await _cidadeService.SelecionaCidade(id);
+                return Ok(cidade);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
-        [HttpGet("{idUf}/Cidade", Name = "CidadePorUF")]
-        public List<Cidade> SelecionaCidadePorUf(int idUf)
+        // GET: api/Cidade/por-uf/3
+        [HttpGet("por-uf/{idUf:int}")]
+        public async Task<ActionResult<List<Cidade>>> SelecionaCidadePorUf(int idUf)
         {
-            return _cidadeService.SelecionaCidadePorUf(idUf);
+            var cidades = await _cidadeService.SelecionaCidadePorUf(idUf);
+            return Ok(cidades);
         }
     }
 }

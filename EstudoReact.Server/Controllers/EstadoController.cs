@@ -1,30 +1,41 @@
 ﻿using EstudoReact.Model;
-using EstudoReact.Service;
+using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstudoReact.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-
+    [Route("api/[controller]")]
     public class EstadoController : ControllerBase
     {
-        EstadoService _estadoService;
-        public EstadoController()
+        private readonly EstadoService _estadoService;
+
+        public EstadoController(EstadoService estadoService)
         {
-            _estadoService = new EstadoService();
+            _estadoService = estadoService;
         }
 
-        [HttpGet(Name ="ListaEstados")]
-        public List<Estado> ListaEstados()
+        // GET: api/Estado
+        [HttpGet]
+        public async Task<ActionResult<List<Estado>>> ListaEstados()
         {
-            return _estadoService.ListaEstados();
+            var estados = await _estadoService.ListaEstados();
+            return Ok(estados);
         }
 
-        [HttpGet("{id}", Name ="SelecionaEstado")]
-        public Estado SelecionaEstado(int id)
+        // GET: api/Estado/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Estado>> SelecionaEstado(int id)
         {
-            return _estadoService.SelecionaEstado(id);
+            try
+            {
+                var estado = await _estadoService.SelecionaEstado(id);
+                return Ok(estado);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
     }
 }

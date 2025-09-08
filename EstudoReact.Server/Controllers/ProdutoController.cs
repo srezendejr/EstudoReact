@@ -1,19 +1,19 @@
 ﻿using EstudoReact.Model;
 using EstudoReact.Server.DTO;
-using EstudoReact.Services;
+using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 
 namespace Estudo.UI.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProdutoController : ControllerBase
     {
-        ProdutoService _produtoService;
-        public ProdutoController()
+        private readonly ProdutoService _produtoService;
+        public ProdutoController(ProdutoService produtoService)
         {
-            _produtoService = new ProdutoService();
+            _produtoService = produtoService;
         }
 
         [HttpGet(Name = "Produtos")]

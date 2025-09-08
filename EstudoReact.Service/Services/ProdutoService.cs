@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstudoReact.Services
+namespace EstudoReact.Service.Services
 {
     public class ProdutoService
     {
@@ -24,9 +24,9 @@ namespace EstudoReact.Services
                 if (ValidarProduto(produto))
                 {
                     if (produto.Id == 0)
-                        _context.Salvar<Produto>(produto);
+                        _context.Salvar(produto);
                     else
-                        _context.Alterar<Produto>(produto);
+                        _context.Alterar(produto);
                     _context.Commit();
                 }
             }
@@ -44,7 +44,7 @@ namespace EstudoReact.Services
                 Produto produto = SelecionaProduto(id);
                 if (ValidarExcluirProduto(produto))
                 {
-                    _context.Excluir<Produto>(produto);
+                    _context.Excluir(produto);
                     _context.Commit();
                 }
             }

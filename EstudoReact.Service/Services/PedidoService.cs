@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstudoReact.Services
+namespace EstudoReact.Service.Services
 {
     public class PedidoService
     {
@@ -24,9 +24,9 @@ namespace EstudoReact.Services
                 if (ValidaPedido(pedido))
                 {
                     if (pedido.Id == 0)
-                        _context.Salvar<Pedido>(pedido);
+                        _context.Salvar(pedido);
                     else
-                        _context.Alterar<Pedido>(pedido);
+                        _context.Alterar(pedido);
                     _context.Commit();
                 }
             }
@@ -51,7 +51,7 @@ namespace EstudoReact.Services
             try
             {
                 Pedido pedido = SelecionarPedido(id);
-                _context.Excluir<Pedido>(pedido);
+                _context.Excluir(pedido);
                 _context.Commit();
             }
             catch (Exception ex)

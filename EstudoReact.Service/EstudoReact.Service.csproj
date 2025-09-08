@@ -11,4 +11,8 @@
     <ProjectReference Include="..\EstudoReact.Util\EstudoReact.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IService\" />
+  </ItemGroup>
+
 </Project>

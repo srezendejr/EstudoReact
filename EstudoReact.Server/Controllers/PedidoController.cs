@@ -1,19 +1,19 @@
 ﻿using EstudoReact.Model;
 using EstudoReact.Server.DTO;
-using EstudoReact.Services;
+using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Estudo.UI.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PedidoController : ControllerBase
     {
-        PedidoService _pedidoService;
+        private readonly PedidoService _pedidoService;
 
-        PedidoController()
+        PedidoController(PedidoService pedidoService)
         {
-            _pedidoService = new PedidoService();
+            _pedidoService = pedidoService;
         }
 
         [HttpGet(Name = "Pedidos")]
