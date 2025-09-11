@@ -21,7 +21,7 @@ function Compradores() {
 
     const [modoEdicao, setModoEdicao] = useState(false);
 
-    const API_URL = 'https://localhost:7048';
+    const API_URL = 'https://localhost:7048/api';
 
     const exibirMensagem = (texto, tipo = 'sucesso') => {
         if (tipo === 'erro') {
@@ -53,7 +53,7 @@ function Compradores() {
 
     useEffect(() => {
         if (novoComprador.idEstado) {
-            fetch(API_URL + '/Cidade/' + novoComprador.idEstado + '/Cidade')
+            fetch(API_URL + '/Cidade/por-uf/' + novoComprador.idEstado)
                 .then(res => res.json())
                 .then(data => setCidades(data))
                 .catch(err => exibirMensagem('Erro ao carregar cidades.' + err, 'erro'));
@@ -120,7 +120,9 @@ function Compradores() {
                 resetForm();
                 exibirMensagem('Comprador adicionado com sucesso!');
             })
-            .catch(err => exibirMensagem('Erro ao adicionar comprador.' + err, 'erro'))
+            .catch(err => {
+                exibirMensagem('Erro ao adicionar comprador. ' + (err.message || 'Erro desconhecido'), 'erro');
+            })
             .finally(() => setCarregando(false));
     };
 
@@ -136,7 +138,7 @@ function Compradores() {
         });
 
         if (comprador.idEstado) {
-            fetch(API_URL + '/Cidade/' + comprador.idEstado + '/Cidade')
+            fetch(API_URL + '/Cidade/por-uf/' + comprador.idEstado)
                 .then(res => res.json())
                 .then(data => setCidades(data))
                 .catch(err => exibirMensagem('Erro ao carregar cidades.' + err, 'erro'));

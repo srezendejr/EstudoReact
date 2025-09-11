@@ -28,6 +28,11 @@ namespace EstudoReact.Util
 
             return result;
         }
+
+        public static string SomenteNumeros(this string value)
+        {
+            return Regex.Replace(value, "[^0-9]+", "");
+        }
         public static string RemoverMascaras(this string value)
         {
             string result = string.Empty;

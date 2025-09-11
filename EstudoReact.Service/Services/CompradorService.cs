@@ -1,6 +1,7 @@
 ﻿using EstudoReact.Model;
 using EstudoReact.Data;
 using Microsoft.EntityFrameworkCore;
+using EstudoReact.Util;
 
 namespace EstudoReact.Service.Services
 {
@@ -82,6 +83,9 @@ namespace EstudoReact.Service.Services
 
             if (!DocumentoValido(comprador.Documento))
                 throw new Exception("Informe um documento válido");
+
+            if (_context.Compradores.Any(a => a.Documento == comprador.Documento))
+                throw new Exception("Já existe um comprador com este documento");
         }
 
         private bool DocumentoValido(string documento)
