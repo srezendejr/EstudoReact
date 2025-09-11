@@ -4,6 +4,9 @@ Acesso a dados utilizando Entity Framework Core.
 Banco de Dados SQLSERVER
 FrontEnd feito em react versão 19.1.1
 Toda aplicação feita utilizando o Vistual Studio 2022.
+Uso de Injeção de Dependência nos servições para uso nos controllers.
+Uso de Data Transfer Objects (DTO) nos controllers para retornar as informações para as páginas.
+Uso do auto mapeamento das classes de domínio para o DTOs.
 
 Baixar o projeto, localmente na sua pasta de prefeência.
 Abrir a solution no visual studio 2022.
