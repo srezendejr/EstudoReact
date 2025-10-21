@@ -1,2 +1,0 @@
-C:\Users\sergiorezende-mtz\source\repos\EstudoReact\estudoreact.client\obj\Debug\estudoreact.client.esproj.CoreCompileInputs.cache
-C:\git\EstudoReact\estudoreact.client\obj\Debug\estudoreact.client.esproj.CoreCompileInputs.cache
