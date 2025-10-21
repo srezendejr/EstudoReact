@@ -4,12 +4,12 @@
     {
         public PedidoDTO()
         {
-            ItemPedidoDTOs = new List<ItemPedidoDTO>();
+            Itens = new List<ItemPedidoDTO>();
         }
         public int Id { get; set; }
         public DateTime DataInclusao { get; set; }
-        public string Comprador { get; set; }
+        public string? Comprador { get; set; }
         public int IdComprador { get; set; }
-        public List<ItemPedidoDTO> ItemPedidoDTOs { get; set; }
+        public List<ItemPedidoDTO> Itens { get; set; }
     }
 }

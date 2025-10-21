@@ -1,4 +1,5 @@
-﻿using EstudoReact.Model;
+﻿using AutoMapper;
+using EstudoReact.Model;
 using EstudoReact.Server.DTO;
 using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,90 +11,76 @@ namespace Estudo.UI.Server.Controllers
     public class PedidoController : ControllerBase
     {
         private readonly PedidoService _pedidoService;
-
-        PedidoController(PedidoService pedidoService)
+        private readonly CompradorService _compradorService;
+        private readonly ProdutoService _produtoService;
+        private readonly IMapper _mapper;
+        public PedidoController(PedidoService pedidoService,
+                                CompradorService compradorService,
+                                ProdutoService produtoService,
+                                IMapper mapper)
         {
             _pedidoService = pedidoService;
+            _compradorService = compradorService;
+            _produtoService = produtoService;
+            _mapper = mapper;
         }
 
-        [HttpGet(Name = "Pedidos")]
-        public IEnumerable<PedidoDTO> ListarPedidos()
+        [HttpGet(Name = "ListarPedido")]
+        public async Task<ActionResult<IEnumerable<PedidoDTO>>> ListarPedidos()
         {
-            List<Pedido> pedidos = _pedidoService.ListarPedido();
-            List<PedidoDTO> dTOs = new List<PedidoDTO>();
-            foreach (Pedido pedido in pedidos)
-            {
-                PedidoDTO pDTO = new PedidoDTO()
-                {
-                    Id = pedido.Id,
-                    DataInclusao = pedido.DataInclusao,
-                    Comprador = pedido.Comprador.Nome,
-                    IdComprador = pedido.IdComprador
-                };
+            List<Pedido> pedidos = await _pedidoService.ListarPedido();
+            List<PedidoDTO> dTOs = _mapper.Map<List<PedidoDTO>>(pedidos);
+            return Ok(dTOs);
+        }
 
-                foreach (ItemPedido produto in pedido.Itens)
-                {
-                    ItemPedidoDTO itemdto = new ItemPedidoDTO
-                    {
-                        IdPedido = produto.IdPedido,
-                        IdProduto = produto.IdProduto,
-                        Item = produto.Item,
-                        Produto = produto.Produto.Nome,
-                        Moeda = produto.Moeda.ToString(),
-                        Valor = produto.Valor,
-                    };
-                    pDTO.ItemPedidoDTOs.Add(itemdto);
-                }
+        [HttpGet("{id}", Name = "SelecionarPedido")]
+        public async Task<ActionResult<PedidoDTO>> SelecionarPedido(int id)
+        {
+            Pedido pedido = await _pedidoService.SelecionarPedido(id);
+            PedidoDTO pDTO = _mapper.Map<PedidoDTO>(pedido);
+
+            return Ok(pDTO);
+        }
+
+        [HttpPut("{id}", Name = "AlterarPedido")]
+        public async Task<ActionResult<PedidoDTO>> AlterarPedido(int id, PedidoDTO dto)
+        {
+            try
+            {
+                if (id != dto.Id)
+                    return BadRequest("ID da rota difere do ID do comprador.");
+                Pedido pedido = _mapper.Map<Pedido>(dto);
+                await _pedidoService.SalvarPedido(pedido);
+
+                Comprador comprador = await _compradorService.SelecionaComprador(pedido.IdComprador);
+                pedido.Comprador = comprador;
+                PedidoDTO dTO = _mapper.Map<PedidoDTO>(pedido);
+                return Ok(dTO);
             }
-            return dTOs;
-        }
-
-        [HttpGet("{id}", Name = "Pedido")]
-        public PedidoDTO SelecionarPedido(int id)
-        {
-            Pedido pedido = _pedidoService.SelecionarPedido(id);
-
-            PedidoDTO pDTO = new PedidoDTO()
+            catch (Exception ex)
             {
-                Id = pedido.Id,
-                DataInclusao = pedido.DataInclusao,
-                Comprador = pedido.Comprador.Nome,
-                IdComprador = pedido.IdComprador
-            };
-
-            foreach (ItemPedido produto in pedido.Itens)
-            {
-                ItemPedidoDTO itemdto = new ItemPedidoDTO
-                {
-                    IdPedido = produto.IdPedido,
-                    IdProduto = produto.IdProduto,
-                    Item = produto.Item,
-                    Produto = produto.Produto.Nome,
-                    Moeda = produto.Moeda.ToString(),
-                    Valor = produto.Valor,
-                };
-                pDTO.ItemPedidoDTOs.Add(itemdto);
+                return BadRequest(ex.Message);
             }
-
-            return pDTO;
         }
 
-        [HttpPut("{id}", Name = "Pedido")]
-        public void AlterarPedido(Pedido Pedido)
+        [HttpPost(Name = "IncluirPedido")]
+        public async Task<ActionResult<PedidoDTO>> IncluirPedido(PedidoDTO dto)
         {
-            _pedidoService.SalvarPedido(Pedido);
+            Comprador comprador = await _compradorService.SelecionaComprador(dto.IdComprador);
+            Pedido pedido = _mapper.Map<Pedido>(dto);
+            pedido.Comprador = comprador;
+            await _pedidoService.SalvarPedido(pedido);
+            
+            pedido.Comprador = comprador;
+            PedidoDTO dTO = _mapper.Map<PedidoDTO>(pedido);
+            return Ok(dto);
         }
 
-        [HttpPost(Name = "Pedidos")]
-        public void IncluirPedido(Pedido Pedido)
+        [HttpDelete("{id}", Name = "ExcluirPedido")]
+        public async Task<IActionResult> ExcluirPedido(int id)
         {
-            _pedidoService.SalvarPedido(Pedido);
-        }
-
-        [HttpDelete("{id}", Name = "Pedido")]
-        public void ExcluirPedido(int id)
-        {
-            _pedidoService.ExcluirPedido(id);
+            await _pedidoService.ExcluirPedido(id);
+            return NoContent();
         }
     }
 }

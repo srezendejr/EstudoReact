@@ -1,4 +1,5 @@
-﻿using EstudoReact.Model;
+﻿using AutoMapper;
+using EstudoReact.Model;
 using EstudoReact.Server.DTO;
 using EstudoReact.Service.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,57 +12,60 @@ namespace Estudo.UI.Server.Controllers
     public class ProdutoController : ControllerBase
     {
         private readonly ProdutoService _produtoService;
-        public ProdutoController(ProdutoService produtoService)
+        private readonly IMapper _mapper;
+        public ProdutoController(ProdutoService produtoService, IMapper mapper)
         {
             _produtoService = produtoService;
+            _mapper = mapper;
         }
 
-        [HttpGet(Name = "Produtos")]
-        public IEnumerable<ProdutoDTO> ListarProdutos()
+        [HttpGet(Name = "ListarProduto")]
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> ListarProdutos()
         {
-            List<Produto> produtos = _produtoService.ListarProduto();
-            List<ProdutoDTO> dTOs = new List<ProdutoDTO>();
-            foreach (Produto item in produtos)
-            {
-                dTOs.Add(new ProdutoDTO
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Origem = item.Origem,
-                });
-            }
-            return dTOs;
+            List<Produto> produtos = await _produtoService.ListarProduto();
+            List<ProdutoDTO> dTOs = _mapper.Map<List<ProdutoDTO>>(produtos);
+            return Ok(dTOs);
         }
 
-        [HttpGet("{id}", Name = "Produto")]
-        public ProdutoDTO SelecionarProduto(int id)
+        [HttpGet("{id}", Name = "SelecionarProduto")]
+        public async Task<ActionResult<ProdutoDTO>> SelecionarProduto(int id)
         {
-            Produto produto = _produtoService.SelecionaProduto(id);
-            ProdutoDTO dto = new ProdutoDTO
-            {
-                Id = produto.Id,
-                Nome = produto.Nome,
-                Origem = produto.Origem,
-            };
-            return dto;
+            Produto produto = await _produtoService.SelecionaProduto(id);
+            ProdutoDTO dto = _mapper.Map<ProdutoDTO>(produto);
+            return Ok(dto);
         }
 
-        [HttpPut("{id}", Name = "Produto")]
-        public void AlterarProduto(Produto produto)
+        [HttpPut("{id}", Name = "AlterarProduto")]
+        public async Task<IActionResult> AlterarProduto(int id, ProdutoDTO dto)
         {
-            _produtoService.SalvarProduto(produto);
+            if (id != dto.Id)
+                return BadRequest("ID da URL não corresponde ao ID do produto.");
+
+            Produto produto = _mapper.Map<Produto>(dto);
+            await _produtoService.SalvarProduto(produto);
+            return CreatedAtRoute("SelecionarProduto", new { id = produto.Id }, dto);
         }
 
-        [HttpPost(Name = "Produtos")]
-        public void IncluirProduto(Produto produto)
+
+        [HttpPost(Name = "IncluirProduto")]
+        public async Task<ActionResult<ProdutoDTO>> IncluirProduto(ProdutoDTO dto)
         {
-            _produtoService.SalvarProduto(produto);
+            Produto produto = _mapper.Map<Produto>(dto);
+            await _produtoService.SalvarProduto(produto);
+            dto.Id = produto.Id;
+            return CreatedAtRoute("SelecionarProduto", new { id = produto.Id }, dto);
         }
 
-        [HttpDelete("{id}", Name = "Produto")]
-        public void ExcluirProduto(int id)
+
+        [HttpDelete("{id}", Name = "ExcluirProduto")]
+        public async Task<IActionResult> ExcluirProduto(int id)
         {
-            _produtoService.ExcluirProduto(id);
+            var produto = await _produtoService.SelecionaProduto(id);
+            if (produto == null)
+                return NotFound();
+
+            await _produtoService.ExcluirProduto(id);
+            return NoContent();
         }
     }
 }

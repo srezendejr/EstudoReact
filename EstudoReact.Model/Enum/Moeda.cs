@@ -8,8 +8,8 @@ namespace Estudo.Model.Enum
 {
     public enum Moeda
     {
-        Real = 1,
-        Dolar = 2,
-        Euro = 3
+        BRL = 1,
+        USD = 2,
+        EUR = 3
     }
 }

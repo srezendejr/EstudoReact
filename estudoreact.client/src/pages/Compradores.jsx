@@ -108,22 +108,26 @@ function Compradores() {
             return;
         }
 
-        setCarregando(true);
         fetch(API_URL + '/Comprador', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(novoComprador),
         })
-            .then(res => res.json())
+            .then(async (res) => {
+                if (!res.ok) {
+                    const errorText = await res.text(); // Lê o corpo da resposta como texto
+                    throw new Error(errorText);
+                }
+                return res.json(); // Sucesso, converte para JSON
+            })
             .then(data => {
                 setCompradores([...compradores, data]);
                 resetForm();
                 exibirMensagem('Comprador adicionado com sucesso!');
             })
             .catch(err => {
-                exibirMensagem('Erro ao adicionar comprador. ' + (err.message || 'Erro desconhecido'), 'erro');
-            })
-            .finally(() => setCarregando(false));
+                exibirMensagem('Erro ao adicionar comprador: ' + err.message, 'erro');
+            });
     };
 
     const iniciarEdicao = (comprador) => {
@@ -166,9 +170,7 @@ function Compradores() {
         if (!novoComprador.nome || !novoComprador.documento || !novoComprador.idEstado || !novoComprador.idCidade) {
             exibirMensagem('Por favor, preencha todos os campos.');
             return;
-        }
-
-        setCarregando(true);
+        }        
         const payload = {
             id: novoComprador.id,
             nome: novoComprador.nome,
@@ -182,14 +184,21 @@ function Compradores() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         })
-            .then(res => res.json())
-            .then(dataAtualizada => {
-                setCompradores(compradores.map(c => c.id === dataAtualizada.id ? dataAtualizada : c));
-                resetForm();
-                exibirMensagem('Comprador atualizado com sucesso!');
+            .then(async (res) => {
+                if (!res.ok) {
+                    const errorText = await res.text(); // Lê o corpo da resposta como texto
+                    throw new Error(errorText);
+                }
+                return res.json(); // Sucesso, converte para JSON
             })
-            .catch(err => exibirMensagem('Erro ao salvar edição.' + err, 'erro'))
-            .finally(() => setCarregando(false));
+            .then(data => {
+                setCompradores([...compradores, data]);
+                resetForm();
+                exibirMensagem('Comprador adicionado com sucesso!');
+            })
+            .catch(err => {
+                exibirMensagem('Erro ao adicionar comprador: ' + err.message, 'erro');
+            });
     };
 
     const resetForm = () => {
@@ -242,63 +251,75 @@ function Compradores() {
             </h3>
 
             <div style={{ marginBottom: '10px' }}>
-                <input
-                    type="text"
-                    name="nome"
-                    placeholder="Nome"
-                    value={novoComprador.nome}
-                    onChange={handleChange}
-                    style={{ marginRight: '10px' }}
-                    disabled={carregando}
-                />
-                <input
-                    type="text"
-                    name="documento"
-                    placeholder="Documento"
-                    value={novoComprador.documento}
-                    inputMode="numeric"
-                    pattern="\d*"
-                    onChange={handleChange}
-                    maxLength={14}
-                    style={{ marginRight: '10px' }}
-                    disabled={carregando}
-                    onPaste={(e) => {
-                        // Pega o texto que o usuário tentou colar
-                        const paste = e.clipboardData.getData('text');
+                <div>
+                    <label htmlFor="nome">Nome:</label><br />
+                    <input
+                        type="text"
+                        name="nome"
+                        placeholder="Nome"
+                        value={novoComprador.nome}
+                        onChange={handleChange}
+                        style={{ marginRight: '10px' }}
+                        disabled={carregando}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="documento">Documento:</label><br />
+                    <input
+                        type="text"
+                        name="documento"
+                        placeholder="Documento"
+                        value={novoComprador.documento}
+                        inputMode="numeric"
+                        pattern="\d*"
+                        onChange={handleChange}
+                        maxLength={14}
+                        style={{ marginRight: '10px' }}
+                        disabled={carregando}
+                        onPaste={(e) => {
+                            // Pega o texto que o usuário tentou colar
+                            const paste = e.clipboardData.getData('text');
 
-                        // Verifica se o texto contém só números
-                        if (!/^\d+$/.test(paste)) {
-                            e.preventDefault(); // bloqueia o paste se tiver caracteres não numéricos
-                        }
-                    }}
-                />
-                <select
-                    name="idEstado"
-                    value={novoComprador.idEstado}
-                    onChange={handleChange}
-                    style={{ marginRight: '10px' }}
-                    disabled={carregando}
-                >
-                    <option value="">Selecione um estado</option>
-                    {estados.map((uf) => (
-                        <option key={uf.id} value={uf.id}>
-                            {uf.nome}
-                        </option>
-                    ))}
-                </select>
-                <select
-                    name="idCidade"
-                    value={novoComprador.idCidade}
-                    onChange={handleChange}
-                    disabled={carregando}
-                >
-                    <option value="">Selecione uma cidade</option>
-                    {cidades.map((cidade) => (
-                        <option key={cidade.id} value={cidade.id}>
-                            {cidade.nome}
-                        </option>
-                    ))}
-                </select>
+                            // Verifica se o texto contém só números
+                            if (!/^\d+$/.test(paste)) {
+                                e.preventDefault(); // bloqueia o paste se tiver caracteres não numéricos
+                            }
+                        }}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="estado">Estado:</label><br />
+                    <select
+                        name="idEstado"
+                        value={novoComprador.idEstado}
+                        onChange={handleChange}
+                        style={{ marginRight: '10px' }}
+                        disabled={carregando}
+                    >
+                        <option value="">Selecione um estado</option>
+                        {estados.map((uf) => (
+                            <option key={uf.id} value={uf.id}>
+                                {uf.nome}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="cidade">Cidade:</label><br />
+                    <select
+                        name="idCidade"
+                        value={novoComprador.idCidade}
+                        onChange={handleChange}
+                        disabled={carregando}
+                    >
+                        <option value="">Selecione uma cidade</option>
+                        {cidades.map((cidade) => (
+                            <option key={cidade.id} value={cidade.id}>
+                                {cidade.nome}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             <button onClick={modoEdicao ? salvarEdicao : adicionarComprador} disabled={carregando}>

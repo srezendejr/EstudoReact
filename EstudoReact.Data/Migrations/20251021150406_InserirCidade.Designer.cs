@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstudoReact.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250829001959_InsercaoCidades")]
-    partial class InsercaoCidades
+    [Migration("20251021150406_InserirCidade")]
+    partial class InserirCidade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,21 +96,12 @@ namespace EstudoReact.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Item")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Item"));
 
                     b.Property<int>("IdProduto")
                         .HasColumnType("int");
 
                     b.Property<int>("Moeda")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PedidoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
@@ -119,9 +110,7 @@ namespace EstudoReact.Data.Migrations
 
                     b.HasKey("IdPedido", "Item");
 
-                    b.HasIndex("PedidoId");
-
-                    b.HasIndex("ProdutoId");
+                    b.HasIndex("IdProduto");
 
                     b.ToTable("ItemPedido", (string)null);
                 });
@@ -193,14 +182,14 @@ namespace EstudoReact.Data.Migrations
                 {
                     b.HasOne("EstudoReact.Model.Pedido", "Pedido")
                         .WithMany("Itens")
-                        .HasForeignKey("PedidoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("IdPedido")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EstudoReact.Model.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("ItensPedido")
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Pedido");
@@ -237,6 +226,11 @@ namespace EstudoReact.Data.Migrations
             modelBuilder.Entity("EstudoReact.Model.Pedido", b =>
                 {
                     b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("EstudoReact.Model.Produto", b =>
+                {
+                    b.Navigation("ItensPedido");
                 });
 #pragma warning restore 612, 618
         }

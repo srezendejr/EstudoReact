@@ -12,5 +12,7 @@ namespace EstudoReact.Model
         public int Id { get; set; }
         public string Nome { get; set; }
         public OrigemProduto Origem { get; set; }
+
+        public virtual List<ItemPedido> ItensPedido { get; set; }
     }
 }

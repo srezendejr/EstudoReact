@@ -5,7 +5,7 @@
 namespace EstudoReact.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InsercaoCidades : Migration
+    public partial class InserirCidade : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -5801,8 +5801,7 @@ INSERT INTO CIDADE (Nome, IdUf) VALUES ('TOCANTINOPOLIS',27)
 INSERT INTO CIDADE (Nome, IdUf) VALUES ('TUPIRAMA',27)
 INSERT INTO CIDADE (Nome, IdUf) VALUES ('TUPIRATINS',27)
 INSERT INTO CIDADE (Nome, IdUf) VALUES ('WANDERLANDIA',27)
-INSERT INTO CIDADE (Nome, IdUf) VALUES ('XAMBIOA',27)
-");
+INSERT INTO CIDADE (Nome, IdUf) VALUES ('XAMBIOA',27)");
         }
 
         /// <inheritdoc />

@@ -100,30 +100,25 @@ namespace EstudoReact.Data.Migrations
                 name: "ItemPedido",
                 columns: table => new
                 {
-                    Item = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Item = table.Column<int>(type: "int", nullable: false),
                     IdPedido = table.Column<int>(type: "int", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Moeda = table.Column<int>(type: "int", nullable: false),
-                    IdProduto = table.Column<int>(type: "int", nullable: false),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    PedidoId = table.Column<int>(type: "int", nullable: false)
+                    IdProduto = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemPedido", x => new { x.IdPedido, x.Item });
                     table.ForeignKey(
-                        name: "FK_ItemPedido_Pedido_PedidoId",
-                        column: x => x.PedidoId,
+                        name: "FK_ItemPedido_Pedido_IdPedido",
+                        column: x => x.IdPedido,
                         principalTable: "Pedido",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ItemPedido_Produto_ProdutoId",
-                        column: x => x.ProdutoId,
+                        name: "FK_ItemPedido_Produto_IdProduto",
+                        column: x => x.IdProduto,
                         principalTable: "Produto",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -137,14 +132,9 @@ namespace EstudoReact.Data.Migrations
                 column: "IdCidade");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemPedido_PedidoId",
+                name: "IX_ItemPedido_IdProduto",
                 table: "ItemPedido",
-                column: "PedidoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemPedido_ProdutoId",
-                table: "ItemPedido",
-                column: "ProdutoId");
+                column: "IdProduto");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pedido_IdComprador",

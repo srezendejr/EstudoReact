@@ -21,7 +21,7 @@ namespace EstudoReact.Data
 
         {
 
-            optionsBuilder.UseSqlServer("Server=localhost;Database=EstudoReact;Integrated Security=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer(@"Server=localhost\SqlExpress;Database=EstudoReact;Integrated Security=True;TrustServerCertificate=True;");
 
         }
         public virtual DbSet<Produto> Produtos { get; set; }

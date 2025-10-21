@@ -55,27 +55,45 @@ namespace Estudo.UI.Server.Controllers
         [HttpPut("{id}", Name = "Alterar")]
         public async Task<IActionResult> AlterarComprador(int id, CompradoresDTO comprador)
         {
-            if (id != comprador.Id)
-                return BadRequest("ID da rota difere do ID do comprador.");
+            try
+            {
+                if (id != comprador.Id)
+                    return BadRequest("ID da rota difere do ID do comprador.");
 
-            var entidade = _mapper.Map<Comprador>(comprador);
-            await _compradorService.SalvarComprador(entidade);
-            Cidade cidade = await _cidadeService.SelecionaCidade(comprador.IdCidade);
-            Estado estado = await _estadoService.SelecionaEstado(comprador.IdEstado);
-            comprador.CidadeNome = cidade?.Nome;
-            comprador.EstadoNome = estado?.Nome;
+                var entidade = _mapper.Map<Comprador>(comprador);
+                await _compradorService.SalvarComprador(entidade);
+                Cidade cidade = await _cidadeService.SelecionaCidade(comprador.IdCidade);
+                Estado estado = await _estadoService.SelecionaEstado(comprador.IdEstado);
+                comprador.CidadeNome = cidade?.Nome;
+                comprador.EstadoNome = estado?.Nome;
 
-            return Ok(comprador);
+                return Ok(comprador);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost(Name = "Incluir")]
         public async Task<IActionResult> IncluirComprador(CompradoresDTO comprador)
         {
 
-            var entidade = _mapper.Map<Comprador>(comprador);
+            try
+            {
+                var entidade = _mapper.Map<Comprador>(comprador);
+                await _compradorService.SalvarComprador(entidade);
 
-            await _compradorService.SalvarComprador(entidade);
-            return CreatedAtRoute("Selecionar", new { id = entidade.Id }, comprador);
+                comprador.Id = entidade.Id;
+                comprador.EstadoNome = (await _estadoService.SelecionaEstado(comprador.IdEstado))?.Nome;
+                comprador.CidadeNome = (await _cidadeService.SelecionaCidade(comprador.IdCidade))?.Nome;
+
+                return CreatedAtRoute("Selecionar", new { id = comprador.Id }, comprador);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}", Name = "Excluir")]

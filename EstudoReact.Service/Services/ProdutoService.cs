@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EstudoReact.Service.Services
 {
@@ -17,7 +18,7 @@ namespace EstudoReact.Service.Services
             _context = new Context();
         }
 
-        public void SalvarProduto(Produto produto)
+        public async Task SalvarProduto(Produto produto)
         {
             try
             {
@@ -27,41 +28,41 @@ namespace EstudoReact.Service.Services
                         _context.Salvar(produto);
                     else
                         _context.Alterar(produto);
-                    _context.Commit();
+                    await _context.CommitAsync();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
         }
 
-        public void ExcluirProduto(int id)
+        public async Task ExcluirProduto(int id)
         {
             try
             {
-                Produto produto = SelecionaProduto(id);
+                Produto produto = await SelecionaProduto(id);
                 if (ValidarExcluirProduto(produto))
                 {
                     _context.Excluir(produto);
-                    _context.Commit();
+                    await _context.CommitAsync();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
-        public List<Produto> ListarProduto()
+        public async Task<List<Produto>> ListarProduto()
         {
-            return _context.Produtos.ToList();
+            return await _context.Produtos.ToListAsync();
         }
 
-        public Produto SelecionaProduto(int id)
+        public async Task<Produto> SelecionaProduto(int id)
         {
-            return _context.Produtos.FirstOrDefault(x => x.Id == id);
+            return await _context.Produtos.FindAsync(id);
         }
 
         private bool ValidarExcluirProduto(Produto produto)
@@ -85,19 +86,13 @@ namespace EstudoReact.Service.Services
                 throw new Exception("Produto inválido");
             }
 
-            if (produto.Id == 0)
-            {
-                valida = false;
-                throw new Exception("Informe um Id válido");
-            }
-
             if (string.IsNullOrEmpty(produto.Nome))
             {
                 valida = false;
                 throw new Exception("Informe um nome válido");
             }
 
-            if (Enum.IsDefined(typeof(OrigemProduto), produto.Origem))
+            if (!Enum.IsDefined(typeof(OrigemProduto), produto.Origem))
             {
                 valida = false;
                 throw new Exception("Informe uma origem válido");

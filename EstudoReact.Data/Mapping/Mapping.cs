@@ -42,8 +42,7 @@ namespace EstudoReact.Data
 
             modelBuilder.Entity<ItemPedido>()
                 .ToTable("ItemPedido")
-                .HasKey(k => new { k.IdPedido, k.Item });
-            modelBuilder.Entity<ItemPedido>().Property(p => p.Item).ValueGeneratedOnAdd();
+                .HasKey(k => new { k.IdPedido, k.Item});
             modelBuilder.Entity<ItemPedido>()
             .Property(p => p.Valor)
             .HasPrecision(18, 2);
@@ -62,6 +61,16 @@ namespace EstudoReact.Data
                 .HasOne(b => b.Comprador)
                 .WithMany(a => a.Pedidos)
                 .HasForeignKey(b => b.IdComprador).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ItemPedido>()
+                .HasOne(b => b.Produto)
+                .WithMany(a => a.ItensPedido)
+                .HasForeignKey(b => b.IdProduto).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ItemPedido>()
+                .HasOne(b => b.Pedido)
+                .WithMany(a => a.Itens)
+                .HasForeignKey(b => b.IdPedido).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

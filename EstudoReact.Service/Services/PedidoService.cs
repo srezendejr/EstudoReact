@@ -1,10 +1,13 @@
 ﻿using Estudo.Model.Enum;
-using EstudoReact.Model;
 using EstudoReact.Data;
+using EstudoReact.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EstudoReact.Service.Services
@@ -17,7 +20,7 @@ namespace EstudoReact.Service.Services
             _context = new Context();
         }
 
-        public void SalvarPedido(Pedido pedido)
+        public async Task SalvarPedido(Pedido pedido)
         {
             try
             {
@@ -27,7 +30,7 @@ namespace EstudoReact.Service.Services
                         _context.Salvar(pedido);
                     else
                         _context.Alterar(pedido);
-                    _context.Commit();
+                    await _context.CommitAsync();
                 }
             }
             catch (Exception ex)
@@ -36,23 +39,26 @@ namespace EstudoReact.Service.Services
             }
         }
 
-        public List<Pedido> ListarPedido()
+        public async Task<List<Pedido>> ListarPedido()
         {
-            return _context.Pedidos.ToList();
+            var pedido = await _context.Pedidos.Include(i => i.Itens).ToListAsync();
+            return pedido;
         }
 
-        public Pedido SelecionarPedido(int Id)
+        public async Task<Pedido> SelecionarPedido(int Id)
         {
-            return _context.Pedidos.FirstOrDefault(p => p.Id == Id);
+            var pedido = await _context.Pedidos.FindAsync(Id);
+            pedido.Itens = await _context.ItensPedido.Where(a => a.IdPedido == Id).ToListAsync();
+            return pedido;
         }
 
-        public void ExcluirPedido(int id)
+        public async Task ExcluirPedido(int id)
         {
             try
             {
-                Pedido pedido = SelecionarPedido(id);
+                Pedido pedido = await SelecionarPedido(id);
                 _context.Excluir(pedido);
-                _context.Commit();
+                await _context.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -70,7 +76,7 @@ namespace EstudoReact.Service.Services
                 throw new Exception("Pedido inválido");
             }
 
-            if (pedido.DataInclusao > DateTime.Now)
+            if (pedido.DataInclusao > DateTime.Now.Date)
             {
                 valida = false;
                 throw new Exception("A data do pedido é maior que a data atual");
@@ -89,6 +95,7 @@ namespace EstudoReact.Service.Services
 
             foreach (ItemPedido item in pedido.Itens)
             {
+                item.Item = item.Item + 1;
                 if (item.Valor <= 0)
                 {
                     valida = false;
@@ -104,5 +111,66 @@ namespace EstudoReact.Service.Services
             return valida;
 
         }
+
+        public async Task<decimal> BuscaValorMoedaEstrangeira(string moeda)
+        {
+            using HttpClient client = new HttpClient();
+            decimal nCotacao = 0;
+            try
+            {
+                // Substitua pela URL da sua API real
+                string url = @$"https://economia.awesomeapi.com.br/json/last/{moeda}";
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    using JsonDocument doc = JsonDocument.Parse(json);
+                    JsonElement root = doc.RootElement;
+
+                    if (root.TryGetProperty($"{moeda.ToUpper()}BRL", out JsonElement usdbrl) &&
+                        usdbrl.TryGetProperty("ask", out JsonElement askElement))
+                    {
+                        string ask = askElement.GetString().Replace(".", ",");
+                        nCotacao = Convert.ToDecimal(ask);
+                    }
+                }
+                else if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    if (response.Headers.TryGetValues("Retry-After", out var valores))
+                    {
+                        if (int.TryParse(valores.First(), out int segundos))
+                        {
+                            Console.WriteLine($"Limite atingido. Aguardando {segundos}s...");
+                            await Task.Delay(segundos * 1000);
+                        }
+                        else
+                        {
+                            await Task.Delay(3000); // fallback de 3s
+                        }
+                    }
+                    else
+                    {
+                        await Task.Delay(3000); // fallback
+                    }
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"Erro HTTP: {httpEx.Message}");
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"Erro ao processar JSON: {jsonEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro inesperado: {ex.Message}");
+            }
+            return nCotacao;
+        }
+
     }
 }

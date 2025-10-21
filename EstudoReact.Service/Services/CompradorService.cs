@@ -84,7 +84,7 @@ namespace EstudoReact.Service.Services
             if (!DocumentoValido(comprador.Documento))
                 throw new Exception("Informe um documento válido");
 
-            if (_context.Compradores.Any(a => a.Documento == comprador.Documento))
+            if (_context.Compradores.Any(a => a.Documento == comprador.Documento && a.Id != comprador.Id))
                 throw new Exception("Já existe um comprador com este documento");
         }
 

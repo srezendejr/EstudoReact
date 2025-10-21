@@ -5,7 +5,7 @@
 namespace EstudoReact.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InsercaoEstado : Migration
+    public partial class InserirEstado : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,7 @@ INSERT INTO ESTADO VALUES('SANTA CATARINA')
 INSERT INTO ESTADO VALUES('SAO PAULO')
 INSERT INTO ESTADO VALUES('SERGIPE')
 INSERT INTO ESTADO VALUES('TOCANTINS')");
+
         }
 
         /// <inheritdoc />
